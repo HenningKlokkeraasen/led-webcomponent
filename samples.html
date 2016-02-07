@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>LED Web Component</title>
+</head>
+<body>
+	<link rel="import" href="led-atom.html">
+	
+	<!--Non-blinking variants-->
+	<led-atom></led-atom>
+	<led-atom color="Green" label="Status"></led-atom>
+	<led-atom color="YELLOW" label="Wait"></led-atom>
+	<led-atom color="red" label="On Air"></led-atom>
+	<led-atom color="blue" label="Cool"></led-atom>
+	
+	<!--Blinking variants-->
+	<led-atom blinkrate="1" label="Clock"></led-atom>
+	<led-atom color="green" label="Slow" blinkrate="2"></led-atom>
+	<led-atom color="yellow" label="Warning" blinkRate="0.5"></led-atom>
+	<led-atom color="red" label="LFO Rate" BLINKRATE="0.1"></led-atom>
+	<led-atom color="blue" label="Really Slow" BlinkRate="5"></led-atom>
+</body>
+</html>

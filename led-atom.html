@@ -1,0 +1,229 @@
+<!--
+	Attribution:
+	LEDs by F. Stephen Kirschbaum http://codepen.io/fskirschbaum/pen/MYJNaj https://github.com/fskirschbaum
+	Web Component led-atom by Henning Klokkeråsen https://github.com/HenningKlokkeraasen
+-->
+<template>
+	<div class="led-box">
+		<div class="led led-white"></div>
+		<span>LED</span>
+	</div>
+
+	<style>
+		.led-box {
+			display: inline-block;
+		}
+
+		.led-box span {
+			text-align: center;
+		}
+		
+		.led {
+			margin: 0 auto;
+			width: 24px;
+			height: 24px;
+			border-radius: 50%;
+		}
+		
+		.led-white {
+			background-color: #FFF;
+    		box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #565555 0 -1px 9px, #BFBCBC 0 2px 12px;
+		}
+
+		@keyframes blinkWhite {
+			from { background-color: #FFF; }
+			50% { background-color: #CCC; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #565555 0 -1px 9px, rgba(255, 255, 255, 0.5) 0 2px 0;}
+			to { background-color: #FFF; }
+		}
+
+		.led-red {
+			background-color: #F00;
+			box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 12px;
+		}
+
+		@keyframes blinkRed {
+			from { background-color: #F00; }
+			50% { background-color: #A00; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 0;}
+			to { background-color: #F00; }
+		}
+
+		.led-yellow {
+			background-color: #FF0;
+			box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #808002 0 -1px 9px, #FF0 0 2px 12px;
+		}
+
+		@keyframes blinkYellow {
+			from { background-color: #FF0; }
+			50% { background-color: #AA0; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #808002 0 -1px 9px, #FF0 0 2px 0; }
+			to { background-color: #FF0; }
+		}
+
+		.led-green {
+			background-color: #ABFF00;
+			box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #304701 0 -1px 9px, #89FF00 0 2px 12px;
+		}
+
+		@keyframes blinkGreen {
+			from { background-color: #ABFF00; }
+			50% { background-color: #71A507; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #304701 0 -1px 9px, #ABFF00 0 2px 0; }
+			to { background-color: #ABFF00; }
+		}
+
+		.led-blue {
+			background-color: #24E0FF;
+			box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #006 0 -1px 9px, #3F8CFF 0 2px 14px;
+		}
+
+		@keyframes blinkBlue {
+			from { background-color: #24E0FF; }
+			50% { background-color: #1FA1B7; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #006 0 -1px 9px, #24E0FF 0 2px 0; }
+			to { background-color: #24E0FF; }
+		}
+
+	</style>
+</template>
+
+<script>
+(function(window, document, undefined) {
+    var importerDoc = document;
+
+    var thisDoc =  (importerDoc._currentScript || importerDoc.currentScript).ownerDocument;
+
+    var template = thisDoc.querySelector('template').content;
+
+    var LedProto = Object.create(HTMLElement.prototype);
+
+    LedProto.color = 'white';
+	LedProto.label = 'LED';
+	LedProto.blinkrate = 0;
+	
+	LedProto.addTemplateInstanceIntoShadowRoot = function(shadowRoot) {
+        var clone = importerDoc.importNode(template, true);
+        shadowRoot.appendChild(clone);
+	};
+	
+	LedProto.cacheDomSelectors = function(shadowRoot) {
+        this.led = shadowRoot.querySelector('div.led-box>div');
+        this.span = shadowRoot.querySelector('div.led-box>span');
+	};
+
+	LedProto.setInitialValues = function() {
+        if (this.hasAttribute('color')) {
+            var color = this.getAttribute('color');
+            this.setColor(color);
+        }
+        else {
+            this.setColor(this.color);
+        }
+		
+        if (this.hasAttribute('label')) {
+            var label = this.getAttribute('label');
+            this.setLabel(label);
+        }
+        else {
+            this.setLabel(this.label);
+        }
+		
+        if (this.hasAttribute('blinkrate')) {
+            var blinkrate = this.getAttribute('blinkrate');
+            this.setBlinkRate(blinkrate);
+        }
+        else {
+            this.setBlinkRate(this.blinkrate);
+        }
+	};
+	
+    LedProto.createdCallback = function() {
+        var shadowRoot = this.createShadowRoot();
+
+        this.addTemplateInstanceIntoShadowRoot(shadowRoot);
+
+        this.cacheDomSelectors(shadowRoot);
+
+        this.setInitialValues();
+    };
+
+    // Fires when an attribute was added, removed, or updated
+    LedProto.attributeChangedCallback = function(attr, oldVal, newVal) {
+        if (attr === 'color') {
+            this.setColor(newVal);
+        }
+        if (attr === 'label') {
+            this.setLabel(newVal);
+        }
+        if (attr === 'blinkrate') {
+            this.setBlinkRate(newVal);
+        }
+    };
+
+    LedProto.setColor = function(val) {
+		switch (val) {
+			case 'white':
+			case 'White':
+			case 'WHITE':
+				this.led.className = 'led led-white';
+        		this.color = 'white';
+				break;
+			case 'red':
+			case 'Red':
+			case 'RED':
+				this.led.className = 'led led-red';
+        		this.color = 'red';
+				break;
+			case 'yellow':
+			case 'Yellow':
+			case 'YELLOW':
+				this.led.className = 'led led-yellow'
+        		this.color = 'yellow';
+				break;
+			case 'green':
+			case 'Green':
+			case 'GREEN':
+				this.led.className = 'led led-green'
+        		this.color = 'green';
+				break;
+			case 'blue':
+			case 'Blue':
+			case 'BLUE':
+				this.led.className = 'led led-blue'
+        		this.color = 'blue';
+				break;
+			default:
+				break;
+		}
+    };
+
+    LedProto.setBlinkRate = function(val) {
+		// TODO check that val is a float/double/decimal
+        this.blinkrate = val;
+		switch (this.color) {
+			case 'white':
+				this.led.style = `animation: blinkWhite ${val}s infinite`;
+				break;
+			case 'red':
+				this.led.style = `animation: blinkRed ${val}s infinite`;
+				break;
+			case 'yellow':
+				this.led.style = `animation: blinkYellow ${val}s infinite`;
+				break;
+			case 'green':
+				this.led.style = `animation: blinkGreen ${val}s infinite`;
+				break;
+			case 'blue':
+				this.led.style = `animation: blinkBlue ${val}s infinite`;
+				break;
+			default:
+				break;
+		}
+    };
+	
+    LedProto.setLabel = function(val) {
+        this.label = val;
+        this.span.textContent = this.label;
+    };
+
+    window.MyElement = importerDoc.registerElement('led-atom', {
+        prototype: LedProto
+    });
+})(window, document);
+</script>
