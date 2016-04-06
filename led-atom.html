@@ -21,10 +21,13 @@
 		}
 		
 		.led {
-			margin: 0 auto;
 			width: 24px;
 			height: 24px;
 			border-radius: 50%;
+		}
+		
+		.center-align {
+			margin: 0 auto;
 		}
 		
 		.led-white {
@@ -97,7 +100,9 @@
 
 	LedProto.color = 'white';
 	LedProto.label = 'LED';
+	LedProto.tooltip = '';
 	LedProto.blinkrate = 0;
+	LedProto.alignment = 'left';
 
 	LedProto.addTemplateInstanceIntoShadowRoot = function(shadowRoot) {
 		var clone = importerDoc.importNode(template, true);
@@ -126,12 +131,28 @@
 			this.setLabel(this.label);
 		}
 
+		if (this.hasAttribute('tooltip')) {
+			var tooltip = this.getAttribute('tooltip');
+			this.setTooltip(tooltip);
+		}
+		else {
+			this.setTooltip(this.tooltip);
+		}
+
 		if (this.hasAttribute('blinkrate')) {
 			var blinkrate = this.getAttribute('blinkrate');
 			this.setBlinkRate(blinkrate);
 		}
 		else {
 			this.setBlinkRate(this.blinkrate);
+		}
+		
+		if (this.hasAttribute('alignment')) {
+			var alignment = this.getAttribute('alignment');
+			this.setAlignment(alignment);
+		}
+		else {
+			this.setAlignment(this.alignment);
 		}
 	};
 
@@ -153,44 +174,40 @@
 		if (attr === 'label') {
 			this.setLabel(newVal);
 		}
+		if (attr === 'tooltip') {
+			this.setTooltip(newVal);
+		}
 		if (attr === 'blinkrate') {
 			this.setBlinkRate(newVal);
+		}
+		if (attr === 'alignment') {
+			this.setAlignment(newVal);
 		}
 	};
 
 	LedProto.setColor = function(val) {
-		switch (val) {
+		switch (val.toLowerCase()) {
 			case 'white':
-			case 'White':
-			case 'WHITE':
 				this.led.className = 'led led-white';
 				this.color = 'white';
 				this.setBlinkRate(this.blinkrate);
 				break;
 			case 'red':
-			case 'Red':
-			case 'RED':
 				this.led.className = 'led led-red';
 				this.color = 'red';
 				this.setBlinkRate(this.blinkrate);
 				break;
 			case 'yellow':
-			case 'Yellow':
-			case 'YELLOW':
 				this.led.className = 'led led-yellow'
 				this.color = 'yellow';
 				this.setBlinkRate(this.blinkrate);
 				break;
 			case 'green':
-			case 'Green':
-			case 'GREEN':
 				this.led.className = 'led led-green'
 				this.color = 'green';
 				this.setBlinkRate(this.blinkrate);
 				break;
 			case 'blue':
-			case 'Blue':
-			case 'BLUE':
 				this.led.className = 'led led-blue'
 				this.color = 'blue';
 				this.setBlinkRate(this.blinkrate);
@@ -229,7 +246,21 @@
 		this.span.textContent = this.label;
 	};
 
-	window.MyElement = importerDoc.registerElement('led-atom', {
+	LedProto.setTooltip = function(val) {
+		this.tooltip = val;
+		this.led.setAttribute('title', this.tooltip);
+	};
+
+	LedProto.setAlignment = function(val) {
+		this.alignment = val;
+		if (val.toLowerCase() === 'center') {
+			this.led.classList.add('center-align');
+		} else {
+			this.led.classList.remove('center-align');
+		}
+	};
+
+	window.LedProto = importerDoc.registerElement('led-atom', {
 		prototype: LedProto
 	});
 })(window, document);
