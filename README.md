@@ -1,24 +1,24 @@
 # led-webcomponent
 A Web Component atom for skeuomorphic LEDs
 
-<!--Non-blinking variants-->
-<led-atom></led-atom>
-<led-atom color="Green" label="Status"></led-atom>
-<led-atom color="YELLOW" label="Wait"></led-atom>
-<led-atom color="red" label="On Air"></led-atom>
-<led-atom color="blue" label="Cool"></led-atom>
 
-<!--Blinking variants-->
-<led-atom blinkrate="1" label="Clock"></led-atom>
-<led-atom color="green" label="Slow" blinkrate="2"></led-atom>
-<led-atom color="yellow" label="Warning" blinkRate="0.5"></led-atom>
-<led-atom color="red" label="LFO Rate" BLINKRATE="0.1"></led-atom>
-<led-atom color="blue" label="Really Slow" BlinkRate="5"></led-atom>
+##Usage
+Add this to the importing document to load the web component:
+ - ` <link rel="import" href="led-atom.html">`
 
-<!--Alignment-->
-<led-atom alignment="center"></led-atom><!--Aligns the LED in the center above the label-->
+Use the web component:
+ - `<led-atom></led-atom>`
 
-<!--Tooltip-->
-<led-atom tooltip="Text for screenreaders and an indication of what the LED indicates"></led-atom>
+Properties:
+ - color: white | green | yellow | red | blue
+ - label: [text] - rendered below the LED
+ - tooltip: [text]
+ - blinkrate: [int] - blinks the provided number of times per second - leave the property out to have a constant, non-blinking light
 
-See samples.html for usage
+Examples:
+ - Default: `<led-atom></led-atom>`
+ - Green with label: `<led-atom color="green" label="All systems OK"></led-atom>`
+ - Red, blinking: `<led-atom color="red" label="LFO Rate" BLINKRATE="0.1"></led-atom>`
+ - Center the LED above the label, set a tooltip: `<led-atom alignment="center" tooltip="Text for screenreaders and an indication of what the LED indicates"></led-atom>`
+
+See samples.html for more
