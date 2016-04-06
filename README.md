@@ -1,6 +1,7 @@
 # led-webcomponent
 A Web Component atom for skeuomorphic LEDs
 
+LOOK! http://henningklokkeraasen.github.io/led-webcomponent/samples.html
 
 ##Usage
 Add this to the importing document to load the web component:
